@@ -40,7 +40,7 @@ export default {
     setMessage: function (event) {
       var payload = {message: this.message1}
       axios
-        .post('http://localhost:8080/message/1', payload).then(res => {
+        .post('/message/1', payload).then(res => {
           console.log(res.data)
           this.$swal({title: 'Message saved.', backdrop: false, type: 'success', timer: 2000})
         })
