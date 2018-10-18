@@ -33,7 +33,18 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
-  }
+    },
+    vendor: ['axios']
+  },
+  modules: [
+    'bootstrap-vue/nuxt'
+  ],
+  plugins: [
+    {src: '~/plugins/vue-sweetalert2', ssr: false},
+    {src: '~/plugins/vue-flash-message', ssr: false}
+  ],
+  css: [
+    'vue-flash-message/dist/vue-flash-message.min.css'
+  ]
 }
 
