@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    backendUrl: process.env.BACKEND_URL || 'http://localhost:8080'
+  },
   /*
   ** Headers of the page
   */
