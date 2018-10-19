@@ -15,6 +15,8 @@ led_hardware_mapping = 'adafruit-hat'
 message1 = ''
 message2 = ''
 
+message1_scroll_speed = 4
+
 max_text_length = led_cols / 2
 
 def initialize():
@@ -43,8 +45,9 @@ def set_message(message1='', message2=''):
     store.set('message1', message1)
     store.set('message2', message2)
 
-def set_standby_message():
+def set_standby():
     set_message('Initialized.', 'Waiting for new message')
+    store.set('message1_scroll_speed', 4)
 
 def get_new_message_from_redis(row=1):
     return store.get('message'+str(row)).decode('utf-8')
@@ -58,6 +61,11 @@ def get_new_message():
     print('1: '+message1)
     print('2: '+message2)
 
+def get_display_parameters():
+    global message1_scroll_speed
+
+    message1_scroll_speed = store.get('message1_scroll_speed')
+
 def check_new_message():
     global message1, message2
 
@@ -68,7 +76,7 @@ def check_new_message():
 
 if __name__ == '__main__':
     initialize()
-    set_standby_message()
+    set_standby()
 
     print('Display initialized.')
 
@@ -88,8 +96,9 @@ if __name__ == '__main__':
 
         while True:
             if check_new_message():
-                print('Changed!')
                 break
+            else:
+                get_display_parameters()
 
             canvas.Clear()
 
@@ -108,5 +117,5 @@ if __name__ == '__main__':
             if message2_position + message2_length < 0:
                 message2_position = canvas.width
 
-            time.sleep(0.04)
+            time.sleep(message1_scroll_speed / 100)
             canvas = matrix.SwapOnVSync(canvas)

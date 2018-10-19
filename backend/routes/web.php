@@ -20,3 +20,5 @@ $router->get('/', function () use ($router) {
 
 $router->get('/message/{row}', 'DisplayController@getMessage');
 $router->post('/message/{row}', 'DisplayController@setMessage');
+$router->get('/message/{row}/speed', 'DisplayController@getSpeed');
+$router->post('/message/{row}/speed', 'DisplayController@setSpeed');

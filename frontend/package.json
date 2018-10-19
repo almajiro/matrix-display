@@ -5,7 +5,7 @@
   "author": "Kuroki Almajiro <kuroki@almajiro.net>",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --spa",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -16,6 +16,7 @@
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.11",
     "nuxt": "^2.0.0",
+    "vue-color": "^2.7.0",
     "vue-flash-message": "^0.6.2",
     "vue-sweetalert2": "^1.5.6"
   },

@@ -37,14 +37,15 @@ module.exports = {
         })
       }
     },
-    vendor: ['axios']
+    vendor: ['axios', 'vue-color']
   },
   modules: [
     'bootstrap-vue/nuxt'
   ],
   plugins: [
     {src: '~/plugins/vue-sweetalert2', ssr: false},
-    {src: '~/plugins/vue-flash-message', ssr: false}
+    {src: '~/plugins/vue-flash-message', ssr: false},
+    {src: '~/plugins/axios', ssr: false}
   ],
   css: [
     'vue-flash-message/dist/vue-flash-message.min.css'

@@ -19,6 +19,9 @@ class DisplayController
      */
     private $redis;
 
+    /**
+     * @var ApiProcessor
+     */
     private $processor;
 
     /**
@@ -38,13 +41,12 @@ class DisplayController
      * @param int     $row
      *
      * @return \Illuminate\Http\JsonResponse
-     * @throws NotAllowedActionException|NotAllowedParameterException
+     * @throws NotAllowedActionException
+     * @throws NotAllowedParameterException
      */
     public function setMessage(int $row)
     {
-        if ($row < 1 || $row > config('display.row')) {
-            throw new NotAllowedActionException('The row ' . $row . ' is not allowed to set');
-        }
+        $this->checkRow($row);
 
         $payload = $this->processor->getPayload();
 
@@ -67,14 +69,67 @@ class DisplayController
      */
     public function getMessage(int $row)
     {
-        if ($row < 1 || $row > config('display.row')) {
-            throw new NotAllowedActionException('The row ' . $row . ' is not allowed to get');
-        }
+        $this->checkRow($row);
 
         $message = $this->redis->get('message' . $row);
 
         return $this->processor->makeJsonResponse(true, [
             'message' => $message
         ]);
+    }
+
+    /**
+     * Set speed to redis.
+     *
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws NotAllowedActionException
+     * @throws NotAllowedParameterException
+     */
+    public function setSpeed(int $row)
+    {
+        $this->checkRow($row);
+
+        $payload = $this->processor->getPayload();
+
+        if (!isset($payload['speed'])) {
+            throw new NotAllowedParameterException('The parameter must be integer');
+        }
+
+        $this->redis->set('message' . $row . '_scroll_speed', $payload['speed']);
+
+        return $this->processor->makeJsonResponse(true, []);
+    }
+
+    /**
+     * Get speed from redis
+     *
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws NotAllowedActionException
+     */
+    public function getSpeed(int $row)
+    {
+        $this->checkRow($row);
+
+        $speed = $this->redis->get('message' . $row . '_scroll_speed');
+
+        return $this->processor->makeJsonResponse(true, [
+            'speed' => $speed
+        ]);
+    }
+
+    /**
+     * @param int $row
+     *
+     * @throws NotAllowedActionException
+     */
+    private function checkRow(int $row)
+    {
+        if ($row < 1 || $row > config('display.row')) {
+            throw new NotAllowedActionException('The row ' . $row . ' is not allowed to set');
+        }
     }
 }

@@ -24,7 +24,7 @@ npm install -g yarn
 ```
 echo "deb http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi" >> /etc/apt/sources.list
 apt-get update
-apt-get install -y php7.2 php7.2-fpm
+apt-get install -y php7.2 php7.2-fpm php7.2-mbstring php7.2-xml
 ```
 #### nginx
 If you already installed apache, you need to uninstall them.
@@ -37,12 +37,19 @@ apt-get install -y nginx
 ```
 
 ### Build
+#### vue.js (nuxt.js)
 ```
 cd ~/
 git clone https://github.com/almajiro/matrix-display.git
-cd matrix-display
-cd frontend
+cd matrix-display/frontend
 yarn
+```
+#### Lumen
+```
+cd ~/
+cd matrix-display/backend
+composer install --no-dev
+cp .env.example .env
 ```
 
 ### Development and Testing
