@@ -117,5 +117,5 @@ if __name__ == '__main__':
             if message2_position + message2_length < 0:
                 message2_position = canvas.width
 
-            time.sleep(message1_scroll_speed / 100)
+            time.sleep(int(message1_scroll_speed) / 100)
             canvas = matrix.SwapOnVSync(canvas)

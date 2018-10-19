@@ -40,6 +40,9 @@
             <b-form-input v-model="message2ScrollSpeed" type="range" id="message2-range" min="0"
                           max="10"></b-form-input>
           </b-form-group>
+          <div class="text-right">
+            <b-button size="lg" variant="success" v-on:click="setSpeed">Save</b-button>
+          </div>
           <b-row>
             <b-col>
               <b-form-group
@@ -102,7 +105,7 @@
       setSpeed: function (event) {
         var payload = {speed: this.message1_scroll_speed}
         axios
-          .post(process.env.backendUrl + '/message/1', payload).then(res => {
+          .post(process.env.backendUrl + '/message/1/speed', payload).then(res => {
           console.log(res.data)
           this.$swal({title: 'Scroll speed has been successfully changed.', backdrop: false, type: 'success', timer: 1000})
         })
