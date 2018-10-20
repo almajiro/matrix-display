@@ -47,7 +47,7 @@ def get_color(row=1):
     green = store.zscore('message'+row+'_color', 'green')
     blue = store.zscore('message'+row+'_color', 'blue')
 
-    return {'red': red, 'green': green, 'blue': blue}
+    return {'red': int(red), 'green': int(green), 'blue': int(blue)}
 
 
 def get_colors():
