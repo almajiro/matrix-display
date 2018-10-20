@@ -111,11 +111,11 @@ if __name__ == '__main__':
             message1_length = graphics.DrawText(canvas, font, message1_position, 14, text_color, message1)
             message2_length = graphics.DrawText(canvas, font, message2_position, 28, text_color, message2)
 
-            if (len(message1) > max_text_length) and (int(message1_scroll_speed) / 100> message1_scroll_counter):
+            if (len(message1) > max_text_length) and (int(message1_scroll_speed) < message1_scroll_counter):
                 message1_position -= 1
                 message1_scroll_counter = 0
 
-            if (len(message2) > max_text_length) and (int(message2_scroll_speed) / 100> message2_scroll_counter):
+            if (len(message2) > max_text_length) and (int(message2_scroll_speed) < message2_scroll_counter):
                 message2_position -= 1
                 message2_scroll_counter = 0
 
