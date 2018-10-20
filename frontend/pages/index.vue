@@ -126,9 +126,8 @@
         })
       },
       setSpeed: function () {
-        var payload = {speed: this.message1_scroll_speed}
         axios
-          .post(process.env.backendUrl + '/message/1/speed', payload).then(res => {
+          .post(process.env.backendUrl + '/message/1/speed', {speed: this.message1_scroll_speed}).then(res => {
           console.log(res.data)
           /*
           this.$swal({
@@ -139,6 +138,10 @@
             timer: 1500
           })
           */
+        })
+        axios
+          .post(process.env.backendUrl + '/message/2/speed', {speed: this.message1_scroll_speed}).then(res => {
+          console.log(res.data)
         })
       }
     }
