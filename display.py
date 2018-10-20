@@ -47,7 +47,7 @@ def get_color(row=1):
     green = store.zscore('message'+str(row)+'_color', 'green')
     blue = store.zscore('message'+str(row)+'_color', 'blue')
 
-    return {red: int(red), green: int(green), blue: int(blue)}
+    return {'red': int(red), 'green': int(green), 'blue': int(blue)}
 
 
 def get_colors():
@@ -56,8 +56,8 @@ def get_colors():
     message1_color_obj = get_color(1)
     message2_color_obj = get_color(2)
 
-    message1_color = graphics.Color(message1_color_obj.red, message1_color_obj.green, message1_color_obj.blue)
-    message2_color = graphics.Color(message2_color_obj.red, message2_color_obj.green, message2_color_obj.blue)
+    message1_color = graphics.Color(message1_color_obj['red'], message1_color_obj['green'], message1_color_obj['blue'])
+    message2_color = graphics.Color(message2_color_obj['red'], message2_color_obj['green'], message2_color_obj['blue'])
 
 
 def set_message(message1='', message2=''):
