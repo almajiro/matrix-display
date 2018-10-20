@@ -35,14 +35,14 @@
               label-for="message1-range"
             >
               <b-form-input v-model="message1_scroll_speed" type="range" id="message1-range" min="0"
-                            max="10" class="speed-slider"></b-form-input>
+                            max="100" class="speed-slider"></b-form-input>
             </b-form-group>
             <b-form-group
               label="2nd Row Scroll Speed"
               label-for="message1-range"
             >
               <b-form-input v-model="message2ScrollSpeed" type="range" id="message2-range" min="0"
-                            max="10" class="speed-slider"></b-form-input>
+                            max="100" class="speed-slider"></b-form-input>
             </b-form-group>
           </div>
         </b-col>

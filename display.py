@@ -16,6 +16,7 @@ message1 = ''
 message2 = ''
 
 message1_scroll_speed = 4
+message2_scroll_speed = 4
 
 max_text_length = led_cols / 2
 
@@ -48,28 +49,30 @@ def set_message(message1='', message2=''):
 def set_standby():
     set_message('Initialized.', 'Waiting for new message')
     store.set('message1_scroll_speed', 4)
+    store.set('message2_scroll_speed', 4)
 
-def get_new_message_from_redis(row=1):
+def get_message(row=1):
     return store.get('message'+str(row)).decode('utf-8')
 
 def get_new_message():
     global message1, message2
 
-    message1 = get_new_message_from_redis(1)
-    message2 = get_new_message_from_redis(2)
+    message1 = get_message(1)
+    message2 = get_message(2)
 
     print('1: '+message1)
     print('2: '+message2)
 
 def get_display_parameters():
-    global message1_scroll_speed
+    global message1_scroll_speed, message2_scroll_speed
 
     message1_scroll_speed = store.get('message1_scroll_speed')
+    message2_scroll_speed = store.get('message1_scroll_speed')
 
 def check_new_message():
     global message1, message2
 
-    if (message1 != get_new_message_from_redis(1)) or (message2 != get_new_message_from_redis(2)):
+    if (message1 != get_message(1)) or (message2 != get_message(2)):
         return True
     else:
         return False
@@ -94,6 +97,8 @@ if __name__ == '__main__':
         else:
             message2_position = 0
 
+        scroll_counter = 0
+
         while True:
             if check_new_message():
                 break
@@ -105,11 +110,13 @@ if __name__ == '__main__':
             message1_length = graphics.DrawText(canvas, font, message1_position, 14, text_color, message1)
             message2_length = graphics.DrawText(canvas, font, message2_position, 28, text_color, message2)
 
-            if len(message1) > max_text_length:
+            if (len(message1) > max_text_length) and (int(message1_scroll_speed) > scroll_counter):
                 message1_position -= 1
+                scroll_counter = 0
 
-            if len(message2) > max_text_length:
+            if (len(message2) > max_text_length) and (int(message2_scroll_speed) > scroll_counter):
                 message2_position -= 1
+                scroll_counter = 0
 
             if message1_position + message1_length < 0:
                 message1_position = canvas.width
@@ -117,5 +124,7 @@ if __name__ == '__main__':
             if message2_position + message2_length < 0:
                 message2_position = canvas.width
 
-            time.sleep(int(message1_scroll_speed) / 100)
+
+            scroll_counter += 1
+            time.sleep(0.001)
             canvas = matrix.SwapOnVSync(canvas)
