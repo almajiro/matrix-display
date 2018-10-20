@@ -25,6 +25,11 @@ class DisplayController
     private $processor;
 
     /**
+     * @var array RGB colors
+     */
+    private $colors = ['red', 'green', 'blue'];
+
+    /**
      * DisplayController constructor.
      *
      * @param ApiProcessor $apiProcessor
@@ -122,6 +127,54 @@ class DisplayController
     }
 
     /**
+     * Set colors to redis.
+     *
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws NotAllowedActionException
+     */
+    public function setColor(int $row)
+    {
+        $this->checkRow($row);
+
+        $payload = $this->processor->getPayload();
+
+        for ($i=0; $i<3; $i++) {
+            $this->redis->zAdd('message' . $row . '_color', $payload['colors'][$this->colors[$i]], $this->colors[$i]);
+        }
+
+        return $this->processor->makeJsonResponse(true, []);
+    }
+
+    /**
+     * Get colors from redis.
+     *
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws NotAllowedActionException
+     */
+    public function getColor(int $row)
+    {
+        $this->checkRow($row);
+
+        $colors = [];
+
+        foreach ($this->colors as $color) {
+            $colors[$color] = $this->redis->zScore('message' . $row . '_color', $color);
+        }
+
+        return $this->processor->makeJsonResponse(true, [
+            'red' => $colors['red'],
+            'green' => $colors['green'],
+            'blue' => $colors['blue'],
+        ]);
+    }
+
+    /**
+     * Check row.
+     *
      * @param int $row
      *
      * @throws NotAllowedActionException

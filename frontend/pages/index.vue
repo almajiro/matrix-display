@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-brand href="#">Display Controller</b-navbar-brand>
+      <b-navbar-brand href="#">RGB Mattix Display Controller</b-navbar-brand>
     </b-navbar>
     <b-container fluid>
       <b-row class="input-messages">
@@ -9,21 +9,14 @@
           <div class="cosmic">
             <b-form-group
               description="Please enter the character string you want to display on the first line."
-              label="1st Row"
-              label-for="message1"
-            >
-              <b-form-input v-model="message1" type="text" placeholder="Hello, " id="message1"></b-form-input>
+              label="1st Row">
+              <b-form-input v-model="message[0]" type="text" placeholder="Hello, " v-on:change="setMessage(1)"></b-form-input>
             </b-form-group>
             <b-form-group
               description="Please enter the character string you want to display on the second line."
-              label="2nd Row"
-              label-for="message1"
-            >
-              <b-form-input v-model="message2" type="text" placeholder="World!"></b-form-input>
+              label="2nd Row">
+              <b-form-input v-model="message[1]" type="text" placeholder="World!" v-on:change="setMessage(2)"></b-form-input>
             </b-form-group>
-            <div class="text-right">
-              <b-button size="lg" variant="success" v-on:click="setMessage">Save</b-button>
-            </div>
           </div>
         </b-col>
       </b-row>
@@ -34,15 +27,15 @@
               label="1st Row Scroll Speed"
               label-for="message1-range"
             >
-              <b-form-input v-model="message1_scroll_speed" type="range" id="message1-range" min="0"
-                            max="100" class="speed-slider"></b-form-input>
+              <b-form-input v-model="message_scroll_speed[0]" type="range" id="message1-range" min="0"
+                            max="100" class="speed-slider" v-on:change="setSpeed(1)"></b-form-input>
             </b-form-group>
             <b-form-group
               label="2nd Row Scroll Speed"
               label-for="message1-range"
             >
-              <b-form-input v-model="message2ScrollSpeed" type="range" id="message2-range" min="0"
-                            max="100" class="speed-slider"></b-form-input>
+              <b-form-input v-model="message_scroll_speed[1]" type="range" id="message2-range" min="0"
+                            max="100" class="speed-slider" v-on:change="setSpeed(2)"></b-form-input>
             </b-form-group>
           </div>
         </b-col>
@@ -53,24 +46,21 @@
             <b-form-group
               label="1st Row Color"
             >
-              <slider-picker v-model="colors" class="slider-picker"/>
-              <material-picker v-model="colors" class="material-picker"/>
+              <slider-picker v-model="message_color[0]" class="slider-picker" @input="setColor(1)"/>
+              <material-picker v-model="message_color[0]" class="material-picker" @input="setColor(1)"/>
             </b-form-group>
             <b-form-group
               label="2nd Row Color"
             >
-              <slider-picker v-model="colors" class="slider-picker"/>
-              <material-picker v-model="colors" class="material-picker"/>
+              <slider-picker v-model="message_color[1]" class="slider-picker" @input="setColor(2)"/>
+              <material-picker v-model="message_color[1]" class="material-picker" @input="setColor(2)"/>
             </b-form-group>
-            <div class="text-right">
-              <b-button size="lg" variant="success" v-on:click="setSpeed">Save</b-button>
-            </div>
           </div>
         </b-col>
       </b-row>
     </b-container>
     <footer>
-      <span>&copy; 2018 Kuroki Almajiro.</span>
+      <span>&copy; 2018 <a href="http://www.almajiro.tokyo" class="creator">Kuroki Almajiro</a>.</span>
     </footer>
   </div>
 </template>
@@ -86,61 +76,55 @@
     },
     data() {
       return {
-        message1: '',
-        message2: '',
-        colors: '#194d33',
-        message1_scroll_speed: 4,
-        message2ScrollSpeed: '',
+        message: ['', ''],
+        message_color: [
+          { r: 255, g: 0, b: 0 },
+          { r: 255, g: 0, b: 0 }
+        ],
+        message_scroll_speed: [4, 4],
       }
     },
     mounted() {
       axios
         .get(process.env.backendUrl + '/message/1').then(res => {
-        this.message1 = res.data.payload.message
+        this.message[0] = res.data.payload.message
       })
       axios
         .get(process.env.backendUrl + '/message/2').then(res => {
-        this.message2 = res.data.payload.message
+        this.message[1] = res.data.payload.message
+      })
+      axios
+        .get(process.env.backendUrl + '/message/1/speed').then(res => {
+        this.message_scroll_speed[0] = res.data.payload.speed
+      })
+      axios
+        .get(process.env.backendUrl + '/message/2/speed').then(res => {
+        this.message_scroll_speed[1] = res.data.payload.speed
       })
     },
-    watch: {
-      message1_scroll_speed: function () {
-        this.setSpeed()
-      }
-    },
     methods: {
-      setMessage: function () {
-        axios
-          .post(process.env.backendUrl + '/message/1', {message: this.message1}).then(res => {
+      setMessage: function (row) {
+        axios.post(process.env.backendUrl + '/message/' + row, {message: this.message[row-1]}).then(res => {
           console.log(res.data)
-        })
-        axios
-          .post(process.env.backendUrl + '/message/2', {message: this.message2}).then(res => {
-          this.$swal({
-            title: 'Message saved.',
-            backdrop: false,
-            type: 'success',
-            background: 'rgb(61, 57, 126)',
-            timer: 1500
-          })
         })
       },
-      setSpeed: function () {
+      setSpeed: function (row) {
         axios
-          .post(process.env.backendUrl + '/message/1/speed', {speed: this.message1_scroll_speed}).then(res => {
-          console.log(res.data)
-          /*
-          this.$swal({
-            title: 'Scroll speed has been successfully changed.',
-            backdrop: false,
-            type: 'success',
-            background: 'rgb(61, 57, 126)',
-            timer: 1500
+          .post(process.env.backendUrl + '/message/' + row +'/speed', {speed: this.message_scroll_speed[row-1]})
+          .then(res => {
+            console.log(res.data)
           })
-          */
-        })
-        axios
-          .post(process.env.backendUrl + '/message/2/speed', {speed: this.message1_scroll_speed}).then(res => {
+      },
+      setColor: function (row) {
+        let payload = {
+          colors: {
+            red: this.message_color[row -1].rgba.r,
+            green: this.message_color[row -1].rgba.g,
+            blue: this.message_color[row -1].rgba.b,
+          }
+        }
+
+        axios.post(process.env.backendUrl + '/message/' + row + '/color', payload).then(res => {
           console.log(res.data)
         })
       }
@@ -152,19 +136,33 @@
   body {
     color: #fff;
     background: rgb(47, 43, 105);
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-family: 'Bai Jamjuree', sans-serif;
+  }
+
+  .creator {
+    font-family: 'Bai Jamjuree', sans-serif;
+    color: #a1a1e5;
+  }
+
+  .creator:hover {
+    color: #a1a1e5;
+    text-decoration: none;
   }
 
   .form-control {
-    background-color: rgba(1, 1, 1, 0.5);
+    padding: .75rem 1.125rem;
     color: #fff;
+    background-color: #37317a;
+    border: 2px solid #342e73;
+    border-radius: .5rem;
   }
 
-  .forn-control:focus {
-    background-color: rgba(1, 1, 1, 0.5) !important;
-    color: #fff !important;
+  .form-control:focus {
+    border: 2px solid #7659ff;
+    background-color: #342e73;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
   }
 
   .btn-success {
@@ -198,14 +196,11 @@
     font-size: 1.75rem;
     font-weight: 500;
     white-space: nowrap;
+    font-family: 'Chakra Petch', sans-serif;
   }
 
   .messsage-input {
     margin-top: 10px !important;
-  }
-
-  .color-picker {
-
   }
 
   .slider-picker {
@@ -215,10 +210,17 @@
 
   .material-picker {
     margin-left: 10px;
+    width: 30% !important;
+    border-radius: 10px !important;
+  }
+
+  .vc-slider-swatch-picker {
+    border-radius: 5px !important;
   }
 
   .vc-material {
     height: auto !important;
+    width: 100%;
   }
 
   .cosmic {
@@ -246,6 +248,7 @@
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    direction: rtl;
   }
 
   footer {
