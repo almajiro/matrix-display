@@ -97,7 +97,8 @@ if __name__ == '__main__':
         else:
             message2_position = 0
 
-        scroll_counter = 0
+        message1_scroll_counter = 0
+        message2_scroll_counter = 0
 
         while True:
             if check_new_message():
@@ -112,11 +113,11 @@ if __name__ == '__main__':
 
             if (len(message1) > max_text_length) and (int(message1_scroll_speed) * 50> scroll_counter):
                 message1_position -= 1
-                scroll_counter = 0
+                message1_scroll_counter = 0
 
             if (len(message2) > max_text_length) and (int(message2_scroll_speed) * 50> scroll_counter):
                 message2_position -= 1
-                scroll_counter = 0
+                message2_scroll_counter = 0
 
             if message1_position + message1_length < 0:
                 message1_position = canvas.width
@@ -124,7 +125,7 @@ if __name__ == '__main__':
             if message2_position + message2_length < 0:
                 message2_position = canvas.width
 
-
-            scroll_counter += 1
+            message1_scroll_counter += 1
+            message2_scroll_counter += 1
             time.sleep(0.001)
             canvas = matrix.SwapOnVSync(canvas)
