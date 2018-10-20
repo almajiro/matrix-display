@@ -2,76 +2,76 @@
   <div>
     <b-navbar toggleable="md" type="dark" variant="info">
       <b-navbar-brand href="#">Display Controller</b-navbar-brand>
-      <b-nav-text right>&copy; 2018 Kuroki Almajiro.</b-nav-text>
     </b-navbar>
     <b-container fluid>
       <b-row class="input-messages">
-        <b-col md="6">
-          <b-form-group
-            description="Please enter the character string you want to display on the first line."
-            label="1st Row"
-            label-for="message1"
-          >
-            <b-form-input v-model="message1" type="text" placeholder="Hello, " id="message1"></b-form-input>
-          </b-form-group>
-          <b-form-group
-            description="Please enter the character string you want to display on the second line."
-            label="2nd Row"
-            label-for="message1"
-          >
-            <b-form-input v-model="message2" type="text" placeholder="World!"></b-form-input>
-          </b-form-group>
-          <div class="text-right">
-            <b-button size="lg" variant="success" v-on:click="setMessage">Save</b-button>
+        <b-col md="6" offset-md="3">
+          <div class="cosmic">
+            <b-form-group
+              description="Please enter the character string you want to display on the first line."
+              label="1st Row"
+              label-for="message1"
+            >
+              <b-form-input v-model="message1" type="text" placeholder="Hello, " id="message1"></b-form-input>
+            </b-form-group>
+            <b-form-group
+              description="Please enter the character string you want to display on the second line."
+              label="2nd Row"
+              label-for="message1"
+            >
+              <b-form-input v-model="message2" type="text" placeholder="World!"></b-form-input>
+            </b-form-group>
+            <div class="text-right">
+              <b-button size="lg" variant="success" v-on:click="setMessage">Save</b-button>
+            </div>
           </div>
         </b-col>
-        <b-col>
-          <b-form-group
-            label="1st Row Scroll Speed"
-            label-for="message1-range"
-          >
-            <b-form-input v-model="message1_scroll_speed" type="range" id="message1-range" min="0"
-                          max="10"></b-form-input>
-          </b-form-group>
-          <b-form-group
-            label="2nd Row Scroll Speed"
-            label-for="message1-range"
-          >
-            <b-form-input v-model="message2ScrollSpeed" type="range" id="message2-range" min="0"
-                          max="10"></b-form-input>
-          </b-form-group>
-          <div class="text-right">
-            <b-button size="lg" variant="success" v-on:click="setSpeed">Save</b-button>
+      </b-row>
+      <b-row>
+        <b-col md="6" offset-md="3">
+          <div class="cosmic">
+            <b-form-group
+              label="1st Row Scroll Speed"
+              label-for="message1-range"
+            >
+              <b-form-input v-model="message1_scroll_speed" type="range" id="message1-range" min="0"
+                            max="10" class="speed-slider"></b-form-input>
+            </b-form-group>
+            <b-form-group
+              label="2nd Row Scroll Speed"
+              label-for="message1-range"
+            >
+              <b-form-input v-model="message2ScrollSpeed" type="range" id="message2-range" min="0"
+                            max="10" class="speed-slider"></b-form-input>
+            </b-form-group>
           </div>
-          <b-row>
-            <b-col>
-              <b-form-group
-                label="1st Row Color"
-              >
-                <div class="color-picker">
-                  <slider-picker v-model="colors"/>
-                </div>
-                <div class="color-picker">
-                  <material-picker v-model="colors" class="material-picker" />
-                </div>
-              </b-form-group>
-            </b-col>
-            <b-col>
-              <b-form-group
-                label="2nd Row Color"
-              >
-                <div class="color-picker">
-                  <slider-picker v-model="colors"/>
-                </div>
-                <div class="color-picker">
-                  <material-picker v-model="colors" class="material-picker" />
-                </div>
-              </b-form-group>
-            </b-col>
-          </b-row>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="6" offset-md="3">
+          <div class="cosmic">
+            <b-form-group
+              label="1st Row Color"
+            >
+              <slider-picker v-model="colors" class="slider-picker"/>
+              <material-picker v-model="colors" class="material-picker"/>
+            </b-form-group>
+            <b-form-group
+              label="2nd Row Color"
+            >
+              <slider-picker v-model="colors" class="slider-picker"/>
+              <material-picker v-model="colors" class="material-picker"/>
+            </b-form-group>
+            <div class="text-right">
+              <b-button size="lg" variant="success" v-on:click="setSpeed">Save</b-button>
+            </div>
+          </div>
         </b-col>
       </b-row>
     </b-container>
+    <footer>
+      <span>&copy; 2018 Kuroki Almajiro.</span>
+    </footer>
   </div>
 </template>
 
@@ -93,21 +93,52 @@
         message2ScrollSpeed: '',
       }
     },
+    mounted() {
+      axios
+        .get(process.env.backendUrl + '/message/1').then(res => {
+        this.message1 = res.data.payload.message
+      })
+      axios
+        .get(process.env.backendUrl + '/message/2').then(res => {
+        this.message2 = res.data.payload.message
+      })
+    },
+    watch: {
+      message1_scroll_speed: function () {
+        this.setSpeed()
+      }
+    },
     methods: {
-      setMessage: function (event) {
-        var payload = {message: this.message1}
+      setMessage: function () {
         axios
-          .post(process.env.backendUrl + '/message/1', payload).then(res => {
+          .post(process.env.backendUrl + '/message/1', {message: this.message1}).then(res => {
           console.log(res.data)
-          this.$swal({title: 'Message saved.', backdrop: false, type: 'success', timer: 1000})
+        })
+        axios
+          .post(process.env.backendUrl + '/message/2', {message: this.message2}).then(res => {
+          this.$swal({
+            title: 'Message saved.',
+            backdrop: false,
+            type: 'success',
+            background: 'rgb(61, 57, 126)',
+            timer: 1500
+          })
         })
       },
-      setSpeed: function (event) {
+      setSpeed: function () {
         var payload = {speed: this.message1_scroll_speed}
         axios
           .post(process.env.backendUrl + '/message/1/speed', payload).then(res => {
           console.log(res.data)
-          this.$swal({title: 'Scroll speed has been successfully changed.', backdrop: false, type: 'success', timer: 1000})
+          /*
+          this.$swal({
+            title: 'Scroll speed has been successfully changed.',
+            backdrop: false,
+            type: 'success',
+            background: 'rgb(61, 57, 126)',
+            timer: 1500
+          })
+          */
         })
       }
     }
@@ -116,49 +147,11 @@
 
 <style>
   body {
-    height: 90vh;
     color: #fff;
-    background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-    background-size: 400% 400%;
-    -webkit-animation: Gradient 15s ease infinite;
-    -moz-animation: Gradient 15s ease infinite;
-    animation: Gradient 15s ease infinite;
-  }
-
-  @-webkit-keyframes Gradient {
-    0% {
-      background-position: 0% 50%
-    }
-    50% {
-      background-position: 100% 50%
-    }
-    100% {
-      background-position: 0% 50%
-    }
-  }
-
-  @-moz-keyframes Gradient {
-    0% {
-      background-position: 0% 50%
-    }
-    50% {
-      background-position: 100% 50%
-    }
-    100% {
-      background-position: 0% 50%
-    }
-  }
-
-  @keyframes Gradient {
-    0% {
-      background-position: 0% 50%
-    }
-    50% {
-      background-position: 100% 50%
-    }
-    100% {
-      background-position: 0% 50%
-    }
+    background: rgb(47, 43, 105);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    --font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    --font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
   }
 
   .form-control {
@@ -172,14 +165,36 @@
   }
 
   .btn-success {
-    color: #fff;
-    background-color: #28a74575;
-    border-color: #28a745;
+    background-image: -webkit-gradient(linear, left top, right top, from(#00d9bf), to(#00d977));
+    background-image: linear-gradient(to right, #00d9bf, #00d977);
+    -webkit-box-shadow: 0 3px 0 0 #00bb85, 0 2px 8px 0 #00d99b, 0 4px 10px 0 rgba(33, 7, 77, .5);
+    box-shadow: 0 3px 0 0 #00bb85, 0 2px 8px 0 #00d99b, 0 4px 10px 0 rgba(33, 7, 77, .5);
+    border-radius: .5rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+    border: none;
+    line-height: calc((1rem * 1.25) + 4px);
+  }
+
+  .btn-success:active {
+    background-image: -webkit-gradient(linear, left top, right top, from(#00bba5), to(#0b6));
+    background-image: linear-gradient(to right, #00bba5, #0b6);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: transparent;
   }
 
   .navbar {
     margin-bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.5) !important;
+    background-color: rgb(61, 57, 126) !important;
+    height: 4.75rem;
+    padding: 1.25rem;
+  }
+
+  .navbar-brand {
+    padding: 0 1.25rem 0 0;
+    font-size: 1.75rem;
+    font-weight: 500;
+    white-space: nowrap;
   }
 
   .messsage-input {
@@ -187,7 +202,12 @@
   }
 
   .color-picker {
-    float: left;
+
+  }
+
+  .slider-picker {
+    width: 65% !important;
+    float: right;
   }
 
   .material-picker {
@@ -196,5 +216,43 @@
 
   .vc-material {
     height: auto !important;
+  }
+
+  .cosmic {
+    font-size: 1rem;
+    line-height: 1.25;
+    background: #3d3780;
+    color: #d1d1ff;
+    margin-bottom: 1.5rem;
+    border-radius: .5rem;
+    -webkit-box-shadow: 0 8px 20px 0 rgba(40, 37, 89, .6);
+    box-shadow: 0 8px 20px 0 rgba(40, 37, 89, .6);
+    font-weight: 400;
+    border: 0 solid #3d3780;
+    scrollbar-face-color: #554db3;
+    scrollbar-track-color: #332e73;
+    padding: 20px;
+  }
+
+  .speed-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 20px;
+    background: rgb(47, 43, 105);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  footer {
+    padding: 1.25rem;
+    background: #3d3780;
+    color: #a1a1e5;
+    border-top: 1px solid #342e73;
+  }
+
+  .swal2-title {
+    color: #fff !important;
   }
 </style>
