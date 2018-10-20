@@ -43,11 +43,11 @@ def initialize():
     store = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 def get_color(row=1):
-    red = store.zscore('message'+row+'_color', 'red')
-    green = store.zscore('message'+row+'_color', 'green')
-    blue = store.zscore('message'+row+'_color', 'blue')
+    red = int(store.zscore('message'+row+'_color', 'red'))
+    green = int(store.zscore('message'+row+'_color', 'green'))
+    blue = int(store.zscore('message'+row+'_color', 'blue'))
 
-    return {'red': int(red), 'green': int(green), 'blue': int(blue)}
+    return {'red': red, 'green': green, 'blue': blue}
 
 
 def get_colors():
