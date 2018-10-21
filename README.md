@@ -1,4 +1,5 @@
 # matrix-display
+![Web Interface](https://raw.githubusercontent.com/almajiro/matrix-display/master/screenshots/web.png)
 ### System Requirements
 * node.js for build frontend (vuejs)
 * PHP >= 7.1 for backend
