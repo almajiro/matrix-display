@@ -13,8 +13,6 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'RGB Matrix Display Controller' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Bai+Jamjuree|Chakra+Petch|M+PLUS+1p|Open+Sans+Condensed:300|Titillium+Web'}
     ]
   },
   /*

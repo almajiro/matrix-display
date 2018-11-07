@@ -40,24 +40,26 @@
           </div>
         </b-col>
       </b-row>
-      <b-row>
-        <b-col md="6" offset-md="3">
-          <div class="cosmic">
-            <b-form-group
-              label="1st Row Color"
-            >
-              <slider-picker v-model="message_color[0]" class="slider-picker" @input="setColor(1)"/>
-              <material-picker v-model="message_color[0]" class="material-picker" @input="setColor(1)"/>
-            </b-form-group>
-            <b-form-group
-              label="2nd Row Color"
-            >
-              <slider-picker v-model="message_color[1]" class="slider-picker" @input="setColor(2)"/>
-              <material-picker v-model="message_color[1]" class="material-picker" @input="setColor(2)"/>
-            </b-form-group>
-          </div>
-        </b-col>
-      </b-row>
+      <no-ssr>
+        <b-row>
+          <b-col md="6" offset-md="3">
+            <div class="cosmic">
+              <b-form-group
+                label="1st Row Color"
+              >
+                <slider-picker v-model="message_color[0]" class="slider-picker" @input="setColor(1)"/>
+                <material-picker v-model="message_color[0]" class="material-picker" @input="setColor(1)"/>
+              </b-form-group>
+              <b-form-group
+                label="2nd Row Color"
+              >
+                <slider-picker v-model="message_color[1]" class="slider-picker" @input="setColor(2)"/>
+                <material-picker v-model="message_color[1]" class="material-picker" @input="setColor(2)"/>
+              </b-form-group>
+            </div>
+          </b-col>
+        </b-row>
+      </no-ssr>
     </b-container>
     <footer>
       <span>&copy; 2018 <a href="http://www.almajiro.tokyo" class="creator">Kuroki Almajiro</a>.</span>
@@ -68,6 +70,10 @@
 <script>
   import axios from 'axios'
   import {Material, Slider} from 'vue-color'
+
+  if (process.browser) {
+    //require('vue-color')
+  }
 
   export default {
     components: {
