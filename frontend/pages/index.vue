@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-brand href="#">RGB Mattix Display Controller</b-navbar-brand>
+      <b-navbar-brand href="#">RGB Matrix Display Controller</b-navbar-brand>
     </b-navbar>
     <b-container fluid>
       <b-row class="input-messages">
@@ -111,14 +111,14 @@
     methods: {
       setMessage: function (row) {
         axios.post(process.env.backendUrl + '/message/' + row, {message: this.message[row-1]}).then(res => {
-          console.log(res.data)
+
         })
       },
       setSpeed: function (row) {
         axios
           .post(process.env.backendUrl + '/message/' + row +'/speed', {speed: this.message_scroll_speed[row-1]})
           .then(res => {
-            console.log(res.data)
+
           })
       },
       setColor: function (row) {
@@ -131,7 +131,7 @@
         }
 
         axios.post(process.env.backendUrl + '/message/' + row + '/color', payload).then(res => {
-          console.log(res.data)
+          
         })
       }
     }
@@ -142,11 +142,9 @@
   body {
     color: #fff;
     background: rgb(47, 43, 105);
-    font-family: 'Bai Jamjuree', sans-serif;
   }
 
   .creator {
-    font-family: 'Bai Jamjuree', sans-serif;
     color: #a1a1e5;
   }
 
@@ -202,7 +200,6 @@
     font-size: 1.75rem;
     font-weight: 500;
     white-space: nowrap;
-    font-family: 'Chakra Petch', sans-serif;
   }
 
   .messsage-input {
