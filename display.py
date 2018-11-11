@@ -75,6 +75,9 @@ def set_standby():
     store.zadd('message2_color', 0, 'green')
     store.zadd('message2_color', 0, 'blue')
 
+    store.set('changed', False)
+    store.set('type', False)
+
 
 def get_message(row=1):
     return store.get('message'+str(row)).decode('utf-8')
