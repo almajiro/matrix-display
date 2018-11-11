@@ -103,7 +103,7 @@ def check():
     status = int(store.get('changed'))
     
     if status == True:
-        store.set('chagned', 0)
+        store.set('changed', 0)
         return True
 
     return False
