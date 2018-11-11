@@ -191,7 +191,7 @@ class DisplayController
 
     private function setStatus(bool $type)
     {
-        $this->redis->set('type', $type);
+        $this->redis->set('type', $type ? '1' : '0');
         $this->redis->set('changed', true);
     }
 }
