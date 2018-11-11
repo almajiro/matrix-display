@@ -115,6 +115,7 @@ def check_type():
 if __name__ == '__main__':
     initialize()
     set_standby()
+    get_colors()
 
     print('Display initialized.')
 
