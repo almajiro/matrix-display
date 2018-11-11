@@ -60,6 +60,7 @@ class DisplayController
         }
 
         $this->redis->set('message' . $row, $payload['message']);
+        $this->setStatus(true);
 
         return $this->processor->makeJsonResponse(true, []);
     }
@@ -120,6 +121,7 @@ class DisplayController
         $this->checkRow($row);
 
         $speed = $this->redis->get('message' . $row . '_scroll_speed');
+        $this->setStatus(false);
 
         return $this->processor->makeJsonResponse(true, [
             'speed' => $speed
@@ -143,6 +145,7 @@ class DisplayController
         for ($i=0; $i<3; $i++) {
             $this->redis->zAdd('message' . $row . '_color', $payload['colors'][$this->colors[$i]], $this->colors[$i]);
         }
+        $this->setStatus(false);
 
         return $this->processor->makeJsonResponse(true, []);
     }
@@ -184,5 +187,11 @@ class DisplayController
         if ($row < 1 || $row > config('display.row')) {
             throw new NotAllowedActionException('The row ' . $row . ' is not allowed to set');
         }
+    }
+
+    private function setStatus(bool $type)
+    {
+        $this->redis->set('type', $type);
+        $this->redis->set('changed', true);
     }
 }

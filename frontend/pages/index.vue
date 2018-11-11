@@ -40,7 +40,7 @@
           </div>
         </b-col>
       </b-row>
-      <no-ssr>
+ 
         <b-row>
           <b-col md="6" offset-md="3">
             <div class="cosmic">
@@ -59,7 +59,7 @@
             </div>
           </b-col>
         </b-row>
-      </no-ssr>
+
     </b-container>
     <footer>
       <span>&copy; 2018 <a href="http://www.almajiro.tokyo" class="creator">Kuroki Almajiro</a>.</span>

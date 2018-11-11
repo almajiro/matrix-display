@@ -18,8 +18,6 @@ message2 = ''
 message1_scroll_speed = 4
 message2_scroll_speed = 4
 
-max_text_length = led_cols / 2
-
 def initialize():
     global options, matrix, canvas, font, text_color, store
 
@@ -93,18 +91,23 @@ def get_new_message():
 def get_display_parameters():
     global message1_scroll_speed, message2_scroll_speed
 
-    message1_scroll_speed = store.get('message1_scroll_speed')
-    message2_scroll_speed = store.get('message2_scroll_speed')
+    message1_scroll_speed = int(store.get('message1_scroll_speed'))
+    message2_scroll_speed = int(store.get('message2_scroll_speed'))
 
     get_colors()
 
-def check_new_message():
-    global message1, message2
-
-    if (message1 != get_message(1)) or (message2 != get_message(2)):
+def check():
+    status = int(store.get('changed'))
+    
+    if status == True:
+        store.set('chagned', False)
         return True
-    else:
-        return False
+
+    return False
+
+def check_type():
+    get_type = int(store.get('type'))
+    return get_type
 
 if __name__ == '__main__':
     initialize()
@@ -116,35 +119,30 @@ if __name__ == '__main__':
         print('Get new message from redis.')
         get_new_message()
 
-        if len(message1) > max_text_length:
-            message1_position = canvas.width
-        else:
-            message1_position = 0
-
-        if len(message2) > max_text_length:
-            message2_position = canvas.width
-        else:
-            message2_position = 0
+        message1_position = canvas.width
+        message2_position = canvas.width
 
         message1_scroll_counter = 0
         message2_scroll_counter = 0
 
         while True:
-            if check_new_message():
-                break
-            else:
-                get_display_parameters()
+            if check():
+                if check_type():
+                    break
+                else:
+                    get_display_parameters()
+                    get_colors()
 
             canvas.Clear()
 
             message1_length = graphics.DrawText(canvas, font, message1_position, 14, message1_color, message1)
             message2_length = graphics.DrawText(canvas, font, message2_position, 28, message2_color, message2)
 
-            if (len(message1) > max_text_length) and (int(message1_scroll_speed) < message1_scroll_counter):
+            if message1_scroll_speed) < message1_scroll_counter:
                 message1_position -= 1
                 message1_scroll_counter = 0
 
-            if (len(message2) > max_text_length) and (int(message2_scroll_speed) < message2_scroll_counter):
+            if message2_scroll_speed) < message2_scroll_counter:
                 message2_position -= 1
                 message2_scroll_counter = 0
 
@@ -158,4 +156,5 @@ if __name__ == '__main__':
             message2_scroll_counter += 1
 
             time.sleep(0.001)
+
             canvas = matrix.SwapOnVSync(canvas)
