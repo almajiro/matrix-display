@@ -75,8 +75,8 @@ def set_standby():
     store.zadd('message2_color', 0, 'green')
     store.zadd('message2_color', 0, 'blue')
 
-    store.set('changed', False)
-    store.set('type', False)
+    store.set('changed', 0)
+    store.set('type', 0)
 
 
 def get_message(row=1):
@@ -103,7 +103,7 @@ def check():
     status = int(store.get('changed'))
     
     if status == True:
-        store.set('chagned', False)
+        store.set('chagned', 0)
         return True
 
     return False
