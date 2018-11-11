@@ -104,6 +104,7 @@ class DisplayController
         }
 
         $this->redis->set('message' . $row . '_scroll_speed', $payload['speed']);
+        $this->setStatus(false);
 
         return $this->processor->makeJsonResponse(true, []);
     }
@@ -121,7 +122,6 @@ class DisplayController
         $this->checkRow($row);
 
         $speed = $this->redis->get('message' . $row . '_scroll_speed');
-        $this->setStatus(false);
 
         return $this->processor->makeJsonResponse(true, [
             'speed' => $speed
