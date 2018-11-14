@@ -12,11 +12,20 @@
               label="1行目">
               <b-form-input v-model="message[0]" type="text" placeholder="Hello, " v-on:change="setMessage(1)"></b-form-input>
             </b-form-group>
+            <div class="text-center">
+              <b-button size='sm' variant='success' v-on:click="setMode(1)">この行のみを表示</b-button>
+            </div>
             <b-form-group
               description="2行目に表示したい文字列を入力してください。"
               label="2行目">
               <b-form-input v-model="message[1]" type="text" placeholder="World!" v-on:change="setMessage(2)"></b-form-input>
             </b-form-group>
+            <div class="text-center">
+              <b-button size='sm' variant='success' v-on:click="setMode(2)">この行のみを表示</b-button>
+            </div>
+            <div class="text-center show-all">
+              <b-button size='sm' variant='success' v-on:click="showAll()">全てを表示</b-button>
+            </div>
           </div>
         </b-col>
       </b-row>
@@ -79,6 +88,7 @@
     data() {
       return {
         message: ['', ''],
+        show: [0, 0],
         message_color: [
           { r: 255, g: 0, b: 0 },
           { r: 255, g: 0, b: 0 }
@@ -125,8 +135,17 @@
             blue: this.message_color[row -1].rgba.b,
           }
         }
-
         axios.post(process.env.backendUrl + '/message/' + row + '/color', payload).then(res => {
+          
+        })
+      },
+      setMode: function (row) {
+        axios.post(process.env.backendUrl + '/row/' + row).then(res => {
+          
+        })
+      },
+      showAll: function () {
+        axios.post(process.env.backendUrl + '/mode', {mode: false}).then(res => {
           
         })
       }
@@ -259,5 +278,9 @@
 
   .swal2-title {
     color: #fff !important;
+  }
+
+  .show-all {
+    padding-top: 15px;
   }
 </style>

@@ -27,4 +27,4 @@ $router->post('/message/{row}/color', 'DisplayController@setColor');
 $router->get('/mode', 'DisplayController@getMode');
 $router->post('/mode', 'DisplayController@setMode');
 $router->get('/row', 'DisplayController@getRow');
-$router->post('/row', 'DisplayController@setRow');
+$router->post('/row{/row}', 'DisplayController@setRow');
