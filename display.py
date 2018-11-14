@@ -5,8 +5,8 @@ import redis
 ##############################################################################
 # Parameters
 ##############################################################################
-default_font = "./fonts/default.bdf"
-light_font = "./fonts/light.bdf"
+default_font_path = "./fonts/default.bdf"
+light_font_path = "./fonts/light.bdf"
 
 led_rows = 32
 led_cols = 32
@@ -44,10 +44,10 @@ def initialize():
     canvas = matrix.CreateFrameCanvas()
 
     default_font = graphics.Font()
-    default_font.LoadFont(default_font)
+    default_font.LoadFont(default_font_path)
 
     light_font = graphics.Font()
-    light_font.LoadFont(light_font)
+    light_font.LoadFont(light_font_path)
 
     text_color = graphics.Color(255, 0, 0)
     store = redis.StrictRedis(host='localhost', port=6379, db=0)
