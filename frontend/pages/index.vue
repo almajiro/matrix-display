@@ -58,12 +58,18 @@
               >
                 <slider-picker v-model="message_color[0]" class="slider-picker" @input="setColor(1)"/>
                 <material-picker v-model="message_color[0]" class="material-picker" @input="setColor(1)"/>
+                <div class="text-center show-all">
+                  <b-button size='sm' variant='success' v-on:click="setRainbow(1)">Rainbow / 単色</b-button>
+                </div>
               </b-form-group>
               <b-form-group
                 label="2行目 文字色"
               >
                 <slider-picker v-model="message_color[1]" class="slider-picker" @input="setColor(2)"/>
                 <material-picker v-model="message_color[1]" class="material-picker" @input="setColor(2)"/>
+                <div class="text-center show-all">
+                  <b-button size='sm' variant='success' v-on:click="setRainbow(2)">Rainbow / 単色</b-button>
+                </div>
               </b-form-group>
             </div>
           </b-col>
@@ -89,6 +95,7 @@
       return {
         message: ['', ''],
         show: [0, 0],
+        rainbow: [0, 0],
         message_color: [
           { r: 255, g: 0, b: 0 },
           { r: 255, g: 0, b: 0 }
@@ -145,6 +152,11 @@
         })
       },
       showAll: function () {
+        axios.post(process.env.backendUrl + '/mode', {mode: false}).then(res => {
+          
+        })
+      },
+      setRainbow: function (row) {
         axios.post(process.env.backendUrl + '/mode', {mode: false}).then(res => {
           
         })

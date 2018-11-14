@@ -251,7 +251,9 @@ class DisplayController
     {
         $this->checkRow($row);
 
-        $this->redis->set('message' . $row . '_rainbow', $row);
+        $payload = $this->processor->getPayload();
+        
+        $this->redis->set('message' . $row . '_rainbow', $payload['rainbow'] ? 1 : 0);
         $this->setStatus(false);
 
         return $this->processor->makeJsonResponse(true, []);
