@@ -113,7 +113,7 @@ def set_standby():
     store.set('type', 0)
 
 def get_display_parameters():
-    for i in range(1, max_row+1):
+    for i in range(max_row):
         get_colors()
         get_scroll_speeds()
 
