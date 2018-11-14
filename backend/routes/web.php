@@ -28,3 +28,5 @@ $router->get('/mode', 'DisplayController@getMode');
 $router->post('/mode', 'DisplayController@setMode');
 $router->get('/row', 'DisplayController@getRow');
 $router->post('/row/{row}', 'DisplayController@setRow');
+$router->get('/rainbow/{row}', 'DisplayController@getRainbow');
+$router->post('/rainbow/{row}', 'DisplayController@setRainbow');
