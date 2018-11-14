@@ -17,9 +17,6 @@ led_brightness = 100
 led_hardware_mapping = 'adafruit-hat'
 max_row = 2
 
-messages[max_row]
-colors[max_row]
-scroll_speeds[max_row]
 margin_top = 14
 
 mode = False
@@ -29,7 +26,9 @@ mode_row = 1
 # Initialize Display
 ##############################################################################
 def initialize():
-    global options, matrix, canvas, default_font, light_font, text_color, store
+    global options, matrix, canvas, store
+    global default_font, light_font
+    global messages = [], colors = [], scroll_speeds = []
 
     options = RGBMatrixOptions()
     options.rows = led_rows
@@ -49,7 +48,11 @@ def initialize():
     light_font = graphics.Font()
     light_font.LoadFont(light_font_path)
 
-    text_color = graphics.Color(255, 0, 0)
+    for i in range(max_row):
+        messages.append(0)
+        colors.append(0)
+        scroll_speeds.append(0)
+
     store = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 ##############################################################################
@@ -59,8 +62,8 @@ def get_message(row=1):
     return store.get('message'+str(row)).decode('utf-8')
 
 def get_messages():
-    for i in range(1, max_row+1):
-        messages[i-1] = get_message(i)
+    for i in range(max_row):
+        messages[i] = get_message(i+1)
         print(str(i)+': '+messages[i])
 
 def set_message(row=1, message=''):
@@ -77,9 +80,9 @@ def get_color(row=1):
     return {'red': int(red), 'green': int(green), 'blue': int(blue)}
 
 def get_colors():
-    for i in range(1, max_row+1):
-        color = get_color(i)
-        colors[i-1] = graphics.Color(color['red'], color['green'], color['blue'])
+    for i in range(max_row):
+        color = get_color(i+1)
+        colors[i] = graphics.Color(color['red'], color['green'], color['blue'])
 
 def set_color(row=1, value=0, color='red'):
     store.zadd('message'+str(row)+'_color', value, color)
@@ -91,8 +94,8 @@ def get_scroll_speed(row=1):
     return int(store.get('message'+str(row)+'_scroll_speed').decode('utf-8'))
 
 def get_scroll_speeds():
-    for i in range(1, max_row+1):
-        scroll_speeds[i-1] = get_scroll_speed(i)
+    for i in range(max_row):
+        scroll_speeds[i] = get_scroll_speed(i+1)
 
 def set_scroll_speed(row=1, speed=4):
     store.set('message'+str(row)+'_scroll_speed', speed)
