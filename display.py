@@ -80,11 +80,11 @@ def set_message(row=1, message=''):
 # Color setter/getter
 ##############################################################################
 def get_color(row=1):
-    red = store.zscore('message'+str(row)+'_color', 'red')
-    green = store.zscore('message'+str(row)+'_color', 'green')
-    blue = store.zscore('message'+str(row)+'_color', 'blue')
+    red = int(store.zscore('message'+str(row)+'_color', 'red'))
+    green = int(store.zscore('message'+str(row)+'_color', 'green'))
+    blue = int(store.zscore('message'+str(row)+'_color', 'blue'))
 
-    return {'red': int(red), 'green': int(green), 'blue': int(blue)}
+    return {'red': red, 'green': green, 'blue': blue}
 
 def get_colors():
     for i in range(max_row):

@@ -8,13 +8,13 @@
         <b-col md="6" offset-md="3">
           <div class="cosmic">
             <b-form-group
-              description="Please enter the character string you want to display on the first line."
-              label="1st Row">
+              description="1行目に表示したい文字列を入力してください。"
+              label="1行目">
               <b-form-input v-model="message[0]" type="text" placeholder="Hello, " v-on:change="setMessage(1)"></b-form-input>
             </b-form-group>
             <b-form-group
-              description="Please enter the character string you want to display on the second line."
-              label="2nd Row">
+              description="2行目に表示したい文字列を入力してください。"
+              label="2行目">
               <b-form-input v-model="message[1]" type="text" placeholder="World!" v-on:change="setMessage(2)"></b-form-input>
             </b-form-group>
           </div>
@@ -24,14 +24,14 @@
         <b-col md="6" offset-md="3">
           <div class="cosmic">
             <b-form-group
-              label="1st Row Scroll Speed"
+              label="1行目 スクロール速度"
               label-for="message1-range"
             >
               <b-form-input v-model="message_scroll_speed[0]" type="range" id="message1-range" min="0"
                             max="20" class="speed-slider" v-on:change="setSpeed(1)"></b-form-input>
             </b-form-group>
             <b-form-group
-              label="2nd Row Scroll Speed"
+              label="2行目 スクロール速度"
               label-for="message1-range"
             >
               <b-form-input v-model="message_scroll_speed[1]" type="range" id="message2-range" min="0"
@@ -45,13 +45,13 @@
           <b-col md="6" offset-md="3">
             <div class="cosmic">
               <b-form-group
-                label="1st Row Color"
+                label="1行目 文字色"
               >
                 <slider-picker v-model="message_color[0]" class="slider-picker" @input="setColor(1)"/>
                 <material-picker v-model="message_color[0]" class="material-picker" @input="setColor(1)"/>
               </b-form-group>
               <b-form-group
-                label="2nd Row Color"
+                label="2行目 文字色"
               >
                 <slider-picker v-model="message_color[1]" class="slider-picker" @input="setColor(2)"/>
                 <material-picker v-model="message_color[1]" class="material-picker" @input="setColor(2)"/>
@@ -70,10 +70,6 @@
 <script>
   import axios from 'axios'
   import {Material, Slider} from 'vue-color'
-
-  if (process.browser) {
-    //require('vue-color')
-  }
 
   export default {
     components: {
