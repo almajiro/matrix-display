@@ -91,7 +91,7 @@ def get_colors():
         color = get_color(i+1)
         colors[i] = graphics.Color(color['red'], color['green'], color['blue'])
 
-def set_color(row=1, value=0, color='red'):
+def set_color(row=1, value=0, color):
     store.zadd('message'+str(row)+'_color', value, color)
 
 ##############################################################################
@@ -112,6 +112,8 @@ def set_scroll_speed(row=1, speed=4):
 ##############################################################################
 def set_standby():
     set_message(1, 'Initialized.')
+    for i in range(2, max_row+1):
+        set_message(i, '')
 
     for i in range(1, max_row+1):
         set_scroll_speed(i, 4)
