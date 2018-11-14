@@ -174,7 +174,7 @@ if __name__ == '__main__':
                 positions ={}
                 counters = {}
 
-                rainbow = {255, 0, 0}
+                rainbow = [255, 0, 0]
                 rainbow_count = 0
 
                 for i in range(max_row):
@@ -214,7 +214,6 @@ if __name__ == '__main__':
                             rainbow[2] -= 1
 
                     cl = graphics.Color(rainbow[0], rainbow[2], rainbow[1])
-
 
                     for i in range(max_row):
                         #lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
