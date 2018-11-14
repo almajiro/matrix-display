@@ -33,6 +33,7 @@ mode_row = 1
 messages = {}
 colors = {}
 scroll_speeds = {}
+rainbows = {}
 
 version = "1.0"
 
@@ -94,6 +95,16 @@ def get_colors():
 def set_color(row=1, value=0, color='red'):
     store.zadd('message'+str(row)+'_color', value, color)
 
+def get_rainbow(row=1):
+    return int(store.get('message'+str(row)+'_rainbow'))
+
+def get_rainbows():
+    for i in range(max_row):
+        rainbows[i] = get_rainbow(i+1)
+
+def set_rainbow(row=1, status=0):
+    store.add('message'+str(row)+'_rainbow', status)
+
 ##############################################################################
 # Scroll Speed setter/getter
 ##############################################################################
@@ -120,6 +131,7 @@ def set_standby():
         set_color(i, 255, 'red')
         set_color(i, 0, 'green')
         set_color(i, 0, 'blue')
+        set_rainbow(i, 1)
 
     store.set('changed', 0)
     store.set('type', 0)
@@ -132,6 +144,7 @@ def get_display_parameters():
     for i in range(max_row):
         get_colors()
         get_scroll_speeds()
+        get_rainbows()
 
     mode = int(store.get('mode'))
     mode_row = int(store.get('row'))
@@ -148,6 +161,27 @@ def check():
 def check_type():
     get_type = int(store.get('type'))
     return get_type
+
+def rainbow(color):
+    if color[0] == 255 and color[2] == 0:
+        color[1] += 1
+                        
+    if color[1] == 255 and color[2] == 0:
+        color[0] -= 1
+
+    if color[1] == 255 and color[0] == 0:
+        color[2] += 1
+
+    if color[2] == 255 and color[0] == 0:
+        color[1] -= 1
+
+    if color[2] == 255 and color[1] == 0:
+        color[0] += 1
+
+    if color[0] == 255 and color[1] == 0:
+        color[2] -= 1
+
+    return color
 
 ##############################################################################
 # Main
@@ -174,12 +208,14 @@ if __name__ == '__main__':
                 positions ={}
                 counters = {}
 
-                rainbow = [255, 0, 0]
-                rainbow_count = 0
+                rainbow_colors = []
+                rainbow_counters = {}
 
                 for i in range(max_row):
                     positions[i] = canvas.width
                     counters[i] = 0
+                    rainbow_counters[i] = 0
+                    rainbow_colors[i] = [255, 0, 0]
 
                 while True:
                     if check():
@@ -190,35 +226,19 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
-
-
-                    if rainbow_count == 1:
-                        rainbow_count = 0
-
-                        if rainbow[0] == 255 and rainbow[2] == 0:
-                            rainbow[1] += 1
-                        
-                        if rainbow[1] == 255 and rainbow[2] == 0:
-                            rainbow[0] -= 1
-
-                        if rainbow[1] == 255 and rainbow[0] == 0:
-                            rainbow[2] += 1
-
-                        if rainbow[2] == 255 and rainbow[0] == 0:
-                            rainbow[1] -= 1
-
-                        if rainbow[2] == 255 and rainbow[1] == 0:
-                            rainbow[0] += 1
-
-                        if rainbow[0] == 255 and rainbow[1] == 0:
-                            rainbow[2] -= 1
-                            
-
-                    cl = graphics.Color(rainbow[0], rainbow[2], rainbow[1])
-
                     for i in range(max_row):
-                        #lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
-                        lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), cl, messages[i])
+                        if rainbows[i] == 1:
+                            rainbow_counters[i] += 1
+
+                            if rainbow_count = 1:
+                                rainbow_colors[i] = rainbow(rainbow_colors[i])
+                                rainbow_counters[i] = 0
+
+                            color = graphics.Color(rainbow_colors[i][0], rainbow_colors[i][2], rainbow_colors[i][1])
+                        else:
+                            color = colors[i]
+
+                        lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), color, messages[i])
 
                         if scroll_speeds[i] < counters[i]:
                             positions[i] -= 1
@@ -228,8 +248,6 @@ if __name__ == '__main__':
                             positions[i] = canvas.width
 
                         counters[i] += 1
-
-                    rainbow_count += 1
 
                     time.sleep(0.001)
                     canvas = matrix.SwapOnVSync(canvas)
@@ -258,5 +276,6 @@ if __name__ == '__main__':
                     counter += 1
                     time.sleep(0.001)
                     canvas = matrix.SwapOnVSync(canvas)
+
     except KeyboardInterrupt:
         print('See you next time!')
