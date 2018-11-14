@@ -163,7 +163,7 @@ if __name__ == '__main__':
                 canvas.Clear()
 
                 for i in range(max_row):
-                    lengths[i] = graphics.DrawText(canvas,default_font, positions[i], margin_top * (max_row+1), colors[i], messages[i])
+                    lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
 
                     if scroll_speeds[i] < counters[i]:
                         positions[i] -= 1
