@@ -208,7 +208,7 @@ if __name__ == '__main__':
                 positions ={}
                 counters = {}
 
-                rainbow_colors = []
+                rainbow_colors = {}
                 rainbow_counters = {}
 
                 for i in range(max_row):
