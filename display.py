@@ -141,13 +141,13 @@ def check_type():
 if __name__ == '__main__':
     initialize()
     set_standby()
-    get_display_parameters()
 
     print('Display initialized.')
 
     while True:
         print('Get new message from redis.')
         get_messages()
+        get_display_parameters()
 
         if mode == False:
             lengths = {}
