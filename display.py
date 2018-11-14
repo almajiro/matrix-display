@@ -1,3 +1,10 @@
+##############################################################################
+# Matrix Display Daemon 
+#
+# Author: Kuroki Almajiro
+# Date:   2018/10/12
+##############################################################################
+
 from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 import time
 import redis
@@ -24,6 +31,8 @@ mode_row = 1
 messages = {}
 colors = {}
 scroll_speeds = {}
+
+version = "1.0"
 
 ##############################################################################
 # Initialize Display
@@ -115,6 +124,8 @@ def set_standby():
     store.set('row', mode_row)
 
 def get_display_parameters():
+    global mode, mode_row
+
     for i in range(max_row):
         get_colors()
         get_scroll_speeds()
@@ -139,13 +150,18 @@ def check_type():
 # Main
 ##############################################################################
 if __name__ == '__main__':
+    print('Matrix Display Daemon')
+    print('Version: '+version)
+    print('-------------------------')
+
+    print('Initializing....')
     initialize()
     set_standby()
 
     print('Display initialized.')
 
     while True:
-        print('Get new message from redis.')
+        print('Fetch new messages')
         get_messages()
         get_display_parameters()
 
@@ -200,8 +216,8 @@ if __name__ == '__main__':
                 length = graphics.DrawText(canvas, light_font, position, 10, color, message)
 
                 if scroll_speed < counter:
-                    positions[i] -= 1
-                    counters[i] = 0
+                    position -= 1
+                    counter = 0
                     
                 if position + length < 0:
                     position = canvas.width
