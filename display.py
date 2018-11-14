@@ -25,6 +25,8 @@ led_hardware_mapping = 'adafruit-hat'
 
 max_row = 2
 margin_top = 14
+margin_top_single = 24
+
 mode = 0
 mode_row = 1
 
@@ -213,7 +215,7 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
-                    length = graphics.DrawText(canvas, light_font, position, 24, color, message)
+                    length = graphics.DrawText(canvas, light_font, position, margin_top_single, color, message)
 
                     if scroll_speed < counter:
                         position -= 1
