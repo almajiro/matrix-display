@@ -59,7 +59,7 @@ def get_message(row=1):
     return store.get('message'+str(row)).decode('utf-8')
 
 def get_messages():
-    for i = 0 to range(1, max_row+1):
+    for i in range(1, max_row+1):
         messages[i-1] = get_message(i)
         print(str(i)+': '+messages[i])
 
@@ -77,7 +77,7 @@ def get_color(row=1):
     return {'red': int(red), 'green': int(green), 'blue': int(blue)}
 
 def get_colors():
-    for i = 0 to range(1, max_row+1):
+    for i in range(1, max_row+1):
         color = get_color(i)
         colors[i-1] = graphics.Color(color['red'], color['green'], color['blue'])
 
@@ -91,7 +91,7 @@ def get_scroll_speed(row=1):
     return int(store.get('message'+str(row)+'_scroll_speed').decode('utf-8'))
 
 def get_scroll_speeds():
-    for i = 0 to range(1, max_row+1):
+    for i in range(1, max_row+1):
         scroll_speeds[i-1] = get_scroll_speed(i)
 
 def set_scroll_speed(row=1, speed=4):
@@ -103,7 +103,7 @@ def set_scroll_speed(row=1, speed=4):
 def set_standby():
     set_message(1, 'Initialized.')
 
-    for i = 0 to range(1, max_row+1):
+    for i in range(1, max_row+1):
         set_scroll_speed(i, 4)
         set_color(i, 255, 'red')
         set_color(i, 0, 'green')
@@ -113,7 +113,7 @@ def set_standby():
     store.set('type', 0)
 
 def get_display_parameters():
-    for i = 0 to range(1, max_row+1):
+    for i in range(1, max_row+1):
         get_colors()
         get_scroll_speeds()
 
