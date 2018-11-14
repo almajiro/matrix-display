@@ -96,7 +96,7 @@
         message_scroll_speed: [4, 4],
       }
     },
-    mounted() {
+    created() {
       axios
         .get(process.env.backendUrl + '/message/1').then(res => {
         this.message[0] = res.data.payload.message

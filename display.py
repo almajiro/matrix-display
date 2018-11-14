@@ -174,6 +174,9 @@ if __name__ == '__main__':
                 positions ={}
                 counters = {}
 
+                rainbow = {255, 0, 0}
+                rainbow_count = 0
+
                 for i in range(max_row):
                     positions[i] = canvas.width
                     counters[i] = 0
@@ -187,8 +190,33 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
+                    if rainbow_count == 1:
+                        rainbow_count = 0
+
+                        if rainbow[0] == 255 & rainbow[2] == 0:
+                            rainbow[1] += 1
+                        
+                        if rainbow[1] == 255 & rainbow[2] == 0:
+                            rainbow[0] -= 1
+
+                        if rainbow[1] == 255 & rainbow[0] == 0:
+                            rainbow[2] += 1
+
+                        if rainbow[2] == 255 & rainbow[0] == 0:
+                            rainbow[1] -= 1
+
+                        if rainbow[2] == 255 & rainbow[1] == 0:
+                            rainbow[0] += 1
+
+                        if rainbow[0] == 255 & rainbow[1] == 0:
+                            rainbow[2] -= 1
+
+                        cl = graphics.Color(rainbow[0], rainbow[2], rainbow[1])
+
+
                     for i in range(max_row):
-                        lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
+                        #lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
+                        lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), cl, messages[i])
 
                         if scroll_speeds[i] < counters[i]:
                             positions[i] -= 1
@@ -198,6 +226,8 @@ if __name__ == '__main__':
                             positions[i] = canvas.width
 
                         counters[i] += 1
+
+                    rainbow_count += 1
 
                     time.sleep(0.001)
                     canvas = matrix.SwapOnVSync(canvas)
