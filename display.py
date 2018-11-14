@@ -230,7 +230,7 @@ if __name__ == '__main__':
                         if rainbows[i] == 1:
                             rainbow_counters[i] += 1
 
-                            if rainbow_count = 1:
+                            if rainbow_count == 1:
                                 rainbow_colors[i] = rainbow(rainbow_colors[i])
                                 rainbow_counters[i] = 0
 
