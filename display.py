@@ -17,9 +17,9 @@ led_brightness = 100
 led_hardware_mapping = 'adafruit-hat'
 max_row = 2
 
-messages = []
-colors = []
-scroll_speeds =[]
+messages[max_row]
+colors[max_row]
+scroll_speeds[max_row]
 margin_top = 14
 
 mode = False
