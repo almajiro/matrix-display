@@ -1,6 +1,6 @@
 [Unit]
 Description=Matrix Display Daemon
-After=multi-user.target
+After=redis.service
 
 [Service]
 WorkingDirectory=/home/pi/matrix-display
