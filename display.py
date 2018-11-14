@@ -103,7 +103,7 @@ def get_rainbows():
         rainbows[i] = get_rainbow(i+1)
 
 def set_rainbow(row=1, status=0):
-    store.add('message'+str(row)+'_rainbow', status)
+    store.set('message'+str(row)+'_rainbow', status)
 
 ##############################################################################
 # Scroll Speed setter/getter
