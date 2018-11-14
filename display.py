@@ -91,7 +91,7 @@ def get_colors():
         color = get_color(i+1)
         colors[i] = graphics.Color(color['red'], color['green'], color['blue'])
 
-def set_color(row=1, value=0, color):
+def set_color(row=1, value=0, color='red'):
     store.zadd('message'+str(row)+'_color', value, color)
 
 ##############################################################################
