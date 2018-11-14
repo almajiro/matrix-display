@@ -179,7 +179,7 @@ class DisplayController
     {
         $payload = $this->processor->getPayload();
 
-        $this->redis->set('mode', $payload['mode']);
+        $this->redis->set('mode', $payload['mode'] ? 1 : 0);
         $this->setStatus(true);
 
         return $this->processor->makeJsonResponse(true, []);
