@@ -213,7 +213,7 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
-                    length = graphics.DrawText(canvas, light_font, position, 28, color, message)
+                    length = graphics.DrawText(canvas, light_font, position, 24, color, message)
 
                     if scroll_speed < counter:
                         position -= 1
