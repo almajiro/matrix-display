@@ -64,7 +64,7 @@ def get_messages():
         print(str(i)+': '+messages[i])
 
 def set_message(row=1, message=''):
-    store.set('message'+str(row), message1)
+    store.set('message'+str(row), message)
 
 ##############################################################################
 # Color setter/getter
