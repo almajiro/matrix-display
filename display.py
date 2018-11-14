@@ -190,6 +190,8 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
+
+
                     if rainbow_count == 1:
                         rainbow_count = 0
 
@@ -211,7 +213,7 @@ if __name__ == '__main__':
                         if rainbow[0] == 255 & rainbow[1] == 0:
                             rainbow[2] -= 1
 
-                        cl = graphics.Color(rainbow[0], rainbow[2], rainbow[1])
+                    cl = graphics.Color(rainbow[0], rainbow[2], rainbow[1])
 
 
                     for i in range(max_row):
