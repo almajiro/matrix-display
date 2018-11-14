@@ -157,8 +157,8 @@
         })
       },
       setRainbow: function (row) {
-        axios.post(process.env.backendUrl + '/mode', {rainbow: !this.rainbow[row-1]}).then(res => {
-          
+        axios.post(process.env.backendUrl + '/rainbow/'+row, {rainbow: !this.rainbow[row-1]}).then(res => {
+          this.rainbow[row-1] = !this.rainbow[row-1]
         })
       }
     }
