@@ -175,6 +175,11 @@ class DisplayController
         ]);
     }
 
+    /**
+     * Set Mode
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function setMode()
     {
         $payload = $this->processor->getPayload();
@@ -185,6 +190,11 @@ class DisplayController
         return $this->processor->makeJsonResponse(true, []);
     }
 
+    /**
+     * Get Mode
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getMode()
     {
         $mode = $this->redis->get('mode');
@@ -194,6 +204,14 @@ class DisplayController
         ]);
     }
 
+    /**
+     * Set Row
+     * 
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws NotAllowedActionException
+     */
     public function setRow(int $row)
     {
         $this->checkRow($row);
@@ -205,12 +223,53 @@ class DisplayController
         return $this->processor->makeJsonResponse(true, []);
     }
 
+    /**
+     * Get Row
+     * 
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getRow(int $row)
     {
         $row = $this->redis->get('row');
 
         return $this->processor->makeJsonResponse(true, [
             'row' => $row
+        ]);
+    }
+
+    /**
+     * Set Rainbow Mode
+     * 
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws NotAllowedActionException
+     */
+    public function setRainbow(int $row)
+    {
+        $this->checkRow($row);
+
+        $this->redis->set('message' . $row . '_rainbow', $row);
+        $this->setStatus(false);
+
+        return $this->processor->makeJsonResponse(true, []);
+    }
+
+    /**
+     * Is rainbow mode ?
+     * 
+     * @param int $row
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getRainbow(int $row)
+    {
+        $row = $this->redis->get('message' . $row . '_rainbow');
+
+        return $this->processor->makeJsonResponse(true, [
+            'rainbow' => $row
         ]);
     }
 
