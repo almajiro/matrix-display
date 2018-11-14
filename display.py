@@ -254,6 +254,8 @@ if __name__ == '__main__':
             else:
                 position = canvas.width
                 counter = 0
+                rainbow_color = [255, 0 ,0]
+                rainbow_counter = 0
 
                 while True:
                     if check():
@@ -264,7 +266,18 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
-                    length = graphics.DrawText(canvas, light_font, position, margin_top_single, colors[mode_row-1], messages[mode_row-1])
+                    if rainbows[mode_row-1] == 1:
+                        rainbow_counter += 1
+
+                        if rainbow_counter == 1:
+                            rainbow_color = rainbow(rainbow_color)
+                            rainbow_counter = 0
+
+                        color = graphics.Color(rainbow_color[0], rainbow_color[2], rainbow_color[1])
+                    else:
+                        color = colors[i]
+
+                    length = graphics.DrawText(canvas, light_font, position, margin_top_single, color, messages[mode_row-1])
 
                     if scroll_speeds[mode_row-1] < counter:
                         position -= 1
