@@ -28,7 +28,7 @@ mode_row = 1
 def initialize():
     global options, matrix, canvas, store
     global default_font, light_font
-    global messages = [], colors = [], scroll_speeds = []
+    global messages, colors, scroll_speeds
 
     options = RGBMatrixOptions()
     options.rows = led_rows
@@ -47,6 +47,10 @@ def initialize():
 
     light_font = graphics.Font()
     light_font.LoadFont(light_font_path)
+
+    messages = []
+    colors = []
+    scroll_speeds = []
 
     for i in range(max_row):
         messages.append(0)
