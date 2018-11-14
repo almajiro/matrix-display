@@ -15,20 +15,18 @@ led_parallel = 1
 led_pwm_bits = 11
 led_brightness = 100
 led_hardware_mapping = 'adafruit-hat'
+
 max_row = 2
-
 margin_top = 14
-
 mode = False
 mode_row = 1
 
-messages = []
-colors = []
-scroll_speeds = []
-lengths = []
-positions =[]
-counters = []
-
+messages = {}
+colors = {}
+scroll_speeds = {}
+lengths = {}
+positions ={}
+counters = {}
 
 ##############################################################################
 # Initialize Display
@@ -54,21 +52,6 @@ def initialize():
 
     light_font = graphics.Font()
     light_font.LoadFont(light_font_path)
-
-    messages = []
-    colors = []
-    scroll_speeds = []
-    lengths = []
-    positions =[]
-    counters = []
-
-    for i in range(max_row):
-        messages.append(0)
-        colors.append(0)
-        scroll_speeds.append(0)
-        lengths.append(0)
-        positions.append(0)
-        counters.append(0)
 
     store = redis.StrictRedis(host='localhost', port=6379, db=0)
 
