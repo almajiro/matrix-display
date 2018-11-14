@@ -22,13 +22,20 @@ margin_top = 14
 mode = False
 mode_row = 1
 
+messages = []
+colors = []
+scroll_speeds = []
+lengths = []
+positions =[]
+coutners = []
+
+
 ##############################################################################
 # Initialize Display
 ##############################################################################
 def initialize():
     global options, matrix, canvas, store
     global default_font, light_font
-    global messages, colors, scroll_speeds, lengths, positions, counters
 
     options = RGBMatrixOptions()
     options.rows = led_rows
