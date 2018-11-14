@@ -160,68 +160,71 @@ if __name__ == '__main__':
 
     print('Display initialized.')
 
-    while True:
-        print('Fetch new messages')
-        get_messages()
-        get_display_parameters()
+    try:
+        print('<Ctrl+C> to Exit')
+        while True:
+            get_messages()
+            get_display_parameters()
 
-        if mode == 0:
-            lengths = {}
-            positions ={}
-            counters = {}
-
-            for i in range(max_row):
-                positions[i] = canvas.width
-                counters[i] = 0
-
-            while True:
-                if check():
-                    if check_type():
-                        break
-                    else:
-                        get_display_parameters()
-
-                canvas.Clear()
+            if mode == 0:
+                lengths = {}
+                positions ={}
+                counters = {}
 
                 for i in range(max_row):
-                    lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
+                    positions[i] = canvas.width
+                    counters[i] = 0
 
-                    if scroll_speeds[i] < counters[i]:
-                        positions[i] -= 1
-                        counters[i] = 0
-                    
-                    if positions[i] + lengths[i] < 0:
-                        positions[i] = canvas.width
+                while True:
+                    if check():
+                        if check_type():
+                            break
+                        else:
+                            get_display_parameters()
 
-                    counters[i] += 1
+                    canvas.Clear()
 
-                time.sleep(0.001)
-                canvas = matrix.SwapOnVSync(canvas)
-        else:
-            message = messages[mode_row-1]
-            color = colors[mode_row-1]
-            scroll_speed = scroll_speeds[mode_row-1]
-            position = canvas.width
-            counter = 0
+                    for i in range(max_row):
+                        lengths[i] = graphics.DrawText(canvas, default_font, positions[i], margin_top * (i+1), colors[i], messages[i])
 
-            while True:
-                if check():
-                    if check_type():
-                        break
-                    else:
-                        get_display_parameters()
+                        if scroll_speeds[i] < counters[i]:
+                            positions[i] -= 1
+                            counters[i] = 0
+                        
+                        if positions[i] + lengths[i] < 0:
+                            positions[i] = canvas.width
 
-                canvas.Clear()
+                        counters[i] += 1
 
-                length = graphics.DrawText(canvas, light_font, position, 10, color, message)
+                    time.sleep(0.001)
+                    canvas = matrix.SwapOnVSync(canvas)
+            else:
+                message = messages[mode_row-1]
+                color = colors[mode_row-1]
+                scroll_speed = scroll_speeds[mode_row-1]
+                position = canvas.width
+                counter = 0
 
-                if scroll_speed < counter:
-                    position -= 1
-                    counter = 0
-                    
-                if position + length < 0:
-                    position = canvas.width
+                while True:
+                    if check():
+                        if check_type():
+                            break
+                        else:
+                            get_display_parameters()
 
-                counter += 1
-                time.sleep(0.001)
-                canvas = matrix.SwapOnVSync(canvas)
+                    canvas.Clear()
+
+                    length = graphics.DrawText(canvas, light_font, position, 28, color, message)
+
+                    if scroll_speed < counter:
+                        position -= 1
+                        counter = 0
+                        
+                    if position + length < 0:
+                        position = canvas.width
+
+                    counter += 1
+                    time.sleep(0.001)
+                    canvas = matrix.SwapOnVSync(canvas)
+    except KeyboardInterrupt:
+        print('See you next time!')
