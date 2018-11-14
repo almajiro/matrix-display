@@ -117,6 +117,9 @@ def get_display_parameters():
         get_colors()
         get_scroll_speeds()
 
+    mode = int(store.get('mode'))
+    mode_row = int(store.get('row'))
+
 def check():
     status = int(store.get('changed'))
     
@@ -175,5 +178,32 @@ if __name__ == '__main__':
                     counters[i] += 1
 
                 time.sleep(0.001)
+                canvas = matrix.SwapOnVSync(canvas)
+        else:
+            message = messages[mode_row-1]
+            color = colors[mode_row-1]
+            scroll_speed = scroll_speeds[mode_row-1]
+            position = canvas.width
+            counter = 0
 
+            while True:
+                if check():
+                    if check_type():
+                        break
+                    else:
+                        get_display_parameters()
+
+                canvas.Clear()
+
+                length = graphics.DrawText(canvas, lgiht_font, position, 10, color, message)
+
+                if scroll_speed < counter:
+                    positions[i] -= 1
+                    counters[i] = 0
+                    
+                if position + length < 0:
+                    position = canvas.width
+
+                counter += 1
+                time.sleep(0.001)
                 canvas = matrix.SwapOnVSync(canvas)
