@@ -24,9 +24,6 @@ mode_row = 1
 messages = {}
 colors = {}
 scroll_speeds = {}
-lengths = {}
-positions ={}
-counters = {}
 
 ##############################################################################
 # Initialize Display
@@ -148,6 +145,10 @@ if __name__ == '__main__':
         get_messages()
 
         if mode == False:
+            lengths = {}
+            positions ={}
+            counters = {}
+
             for i in range(max_row):
                 positions[i] = canvas.width
                 coutners[i] = 0
