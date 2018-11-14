@@ -82,7 +82,7 @@ def get_colors():
         colors[i-1] = graphics.Color(color['red'], color['green'], color['blue'])
 
 def set_color(row=1, value=0, color='red'):
-    store.zadd('message'+str(row)'_color', value, color)
+    store.zadd('message'+str(row)+'_color', value, color)
 
 ##############################################################################
 # Scroll Speed setter/getter
