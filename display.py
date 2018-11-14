@@ -200,9 +200,6 @@ if __name__ == '__main__':
                     time.sleep(0.001)
                     canvas = matrix.SwapOnVSync(canvas)
             else:
-                message = messages[mode_row-1]
-                color = colors[mode_row-1]
-                scroll_speed = scroll_speeds[mode_row-1]
                 position = canvas.width
                 counter = 0
 
@@ -215,9 +212,9 @@ if __name__ == '__main__':
 
                     canvas.Clear()
 
-                    length = graphics.DrawText(canvas, light_font, position, margin_top_single, color, message)
+                    length = graphics.DrawText(canvas, light_font, position, margin_top_single, colors[mode_row-1], messages[mode_row-1])
 
-                    if scroll_speed < counter:
+                    if scroll_speeds[mode_row-1] < counter:
                         position -= 1
                         counter = 0
                         
