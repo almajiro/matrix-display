@@ -18,7 +18,7 @@ led_hardware_mapping = 'adafruit-hat'
 
 max_row = 2
 margin_top = 14
-mode = False
+mode = 0
 mode_row = 1
 
 messages = {}
