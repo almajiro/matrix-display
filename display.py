@@ -27,7 +27,7 @@ colors = []
 scroll_speeds = []
 lengths = []
 positions =[]
-coutners = []
+counters = []
 
 
 ##############################################################################
@@ -60,7 +60,7 @@ def initialize():
     scroll_speeds = []
     lengths = []
     positions =[]
-    coutners = []
+    counters = []
 
     for i in range(max_row):
         messages.append(0)
