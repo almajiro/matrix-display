@@ -195,23 +195,24 @@ if __name__ == '__main__':
                     if rainbow_count == 1:
                         rainbow_count = 0
 
-                        if rainbow[0] == 255 & rainbow[2] == 0:
+                        if rainbow[0] == 255 and rainbow[2] == 0:
                             rainbow[1] += 1
                         
-                        if rainbow[1] == 255 & rainbow[2] == 0:
+                        if rainbow[1] == 255 and rainbow[2] == 0:
                             rainbow[0] -= 1
 
-                        if rainbow[1] == 255 & rainbow[0] == 0:
+                        if rainbow[1] == 255 and rainbow[0] == 0:
                             rainbow[2] += 1
 
-                        if rainbow[2] == 255 & rainbow[0] == 0:
+                        if rainbow[2] == 255 and rainbow[0] == 0:
                             rainbow[1] -= 1
 
-                        if rainbow[2] == 255 & rainbow[1] == 0:
+                        if rainbow[2] == 255 and rainbow[1] == 0:
                             rainbow[0] += 1
 
-                        if rainbow[0] == 255 & rainbow[1] == 0:
+                        if rainbow[0] == 255 and rainbow[1] == 0:
                             rainbow[2] -= 1
+                            
 
                     cl = graphics.Color(rainbow[0], rainbow[2], rainbow[1])
 
