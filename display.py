@@ -28,7 +28,7 @@ mode_row = 1
 def initialize():
     global options, matrix, canvas, store
     global default_font, light_font
-    global messages, colors, scroll_speeds
+    global messages, colors, scroll_speeds, lengths, positions, counters
 
     options = RGBMatrixOptions()
     options.rows = led_rows
@@ -51,11 +51,17 @@ def initialize():
     messages = []
     colors = []
     scroll_speeds = []
+    lengths = []
+    positions =[]
+    coutners = []
 
     for i in range(max_row):
         messages.append(0)
         colors.append(0)
         scroll_speeds.append(0)
+        lengths.append(0)
+        positions.append(0)
+        counters.append(0)
 
     store = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -152,10 +158,6 @@ if __name__ == '__main__':
         get_messages()
 
         if mode == False:
-            lengths = []
-            positions =[]
-            coutners = []
-
             for i in range(max_row):
                 positions[i] = canvas.width
                 coutners[i] = 0
