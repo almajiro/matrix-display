@@ -149,7 +149,7 @@ if __name__ == '__main__':
         get_messages()
         get_display_parameters()
 
-        if mode == False:
+        if mode == 0:
             lengths = {}
             positions ={}
             counters = {}
@@ -197,7 +197,7 @@ if __name__ == '__main__':
 
                 canvas.Clear()
 
-                length = graphics.DrawText(canvas, lgiht_font, position, 10, color, message)
+                length = graphics.DrawText(canvas, light_font, position, 10, color, message)
 
                 if scroll_speed < counter:
                     positions[i] -= 1
