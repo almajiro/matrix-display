@@ -70,7 +70,6 @@ def get_message(row=1):
 def get_messages():
     for i in range(max_row):
         messages[i] = get_message(i+1)
-        print(str(i)+': '+messages[i])
 
 def set_message(row=1, message=''):
     store.set('message'+str(row), message)
