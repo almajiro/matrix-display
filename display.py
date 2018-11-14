@@ -111,6 +111,8 @@ def set_standby():
 
     store.set('changed', 0)
     store.set('type', 0)
+    store.set('mode', mode)
+    store.set('row', mode_row)
 
 def get_display_parameters():
     for i in range(max_row):
