@@ -2,7 +2,11 @@ from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 import time
 import redis
 
-led_font = "./fonts/k8x12.bdf"
+##############################################################################
+# Parameters
+##############################################################################
+default_font = "./fonts/default.bdf"
+light_font = "./fonts/light.bdf"
 
 led_rows = 32
 led_cols = 32
@@ -11,15 +15,21 @@ led_parallel = 1
 led_pwm_bits = 11
 led_brightness = 100
 led_hardware_mapping = 'adafruit-hat'
+max_row = 2
 
-message1 = ''
-message2 = ''
+messages = []
+colors = []
+scroll_speeds =[]
+margin_top = 14
 
-message1_scroll_speed = 4
-message2_scroll_speed = 4
+mode = False
+mode_row = 1
 
+##############################################################################
+# Initialize Display
+##############################################################################
 def initialize():
-    global options, matrix, canvas, font, text_color, store
+    global options, matrix, canvas, default_font, light_font, text_color, store
 
     options = RGBMatrixOptions()
     options.rows = led_rows
@@ -33,13 +43,32 @@ def initialize():
     matrix = RGBMatrix(options=options)
     canvas = matrix.CreateFrameCanvas()
 
-    font = graphics.Font()
-    font.LoadFont(led_font)
+    default_font = graphics.Font()
+    default_font.LoadFont(default_font)
+
+    light_font = graphics.Font()
+    light_font.LoadFont(light_font)
 
     text_color = graphics.Color(255, 0, 0)
-
     store = redis.StrictRedis(host='localhost', port=6379, db=0)
 
+##############################################################################
+# Message setter/getter
+##############################################################################
+def get_message(row=1):
+    return store.get('message'+str(row)).decode('utf-8')
+
+def get_messages():
+    for i = 0 to range(1, max_row+1):
+        messages[i-1] = get_message(i)
+        print(str(i)+': '+messages[i])
+
+def set_message(row=1, message=''):
+    store.set('message'+str(row), message1)
+
+##############################################################################
+# Color setter/getter
+##############################################################################
 def get_color(row=1):
     red = store.zscore('message'+str(row)+'_color', 'red')
     green = store.zscore('message'+str(row)+'_color', 'green')
@@ -47,57 +76,46 @@ def get_color(row=1):
 
     return {'red': int(red), 'green': int(green), 'blue': int(blue)}
 
-
 def get_colors():
-    global message1_color, message2_color
+    for i = 0 to range(1, max_row+1):
+        color = get_color(i)
+        colors[i-1] = graphics.Color(color['red'], color['green'], color['blue'])
 
-    message1_color_obj = get_color(1)
-    message2_color_obj = get_color(2)
+def set_color(row=1, value=0, color='red'):
+    store.zadd('message'+str(row)'_color', value, color)
 
-    message1_color = graphics.Color(message1_color_obj['red'], message1_color_obj['green'], message1_color_obj['blue'])
-    message2_color = graphics.Color(message2_color_obj['red'], message2_color_obj['green'], message2_color_obj['blue'])
+##############################################################################
+# Scroll Speed setter/getter
+##############################################################################
+def get_scroll_speed(row=1):
+    return int(store.get('message'+str(row)+'_scroll_speed').decode('utf-8'))
 
+def get_scroll_speeds():
+    for i = 0 to range(1, max_row+1):
+        scroll_speeds[i-1] = get_scroll_speed(i)
 
-def set_message(message1='', message2=''):
-    store.set('message1', message1)
-    store.set('message2', message2)
+def set_scroll_speed(row=1, speed=4):
+    store.set('message'+str(row)+'_scroll_speed', message1)
 
+##############################################################################
+# Common Functions
+##############################################################################
 def set_standby():
-    set_message('Initialized.', 'Waiting for new message')
-    store.set('message1_scroll_speed', 4)
-    store.set('message2_scroll_speed', 4)
+    set_message(1, 'Initialized.')
 
-    store.zadd('message1_color', 255, 'red')
-    store.zadd('message1_color', 0, 'green')
-    store.zadd('message1_color', 0, 'blue')
-
-    store.zadd('message2_color', 255, 'red')
-    store.zadd('message2_color', 0, 'green')
-    store.zadd('message2_color', 0, 'blue')
+    for i = 0 to range(1, max_row+1):
+        set_scroll_speed(i, 4)
+        set_color(i, 255, 'red')
+        set_color(i, 0, 'green')
+        set_color(i, 0, 'blue')
 
     store.set('changed', 0)
     store.set('type', 0)
 
-
-def get_message(row=1):
-    return store.get('message'+str(row)).decode('utf-8')
-
-def get_new_message():
-    global message1, message2
-
-    message1 = get_message(1)
-    message2 = get_message(2)
-
-    print('1: '+message1)
-    print('2: '+message2)
-
 def get_display_parameters():
-    global message1_scroll_speed, message2_scroll_speed
-
-    message1_scroll_speed = int(store.get('message1_scroll_speed'))
-    message2_scroll_speed = int(store.get('message2_scroll_speed'))
-
-    get_colors()
+    for i = 0 to range(1, max_row+1):
+        get_colors()
+        get_scroll_speeds()
 
 def check():
     status = int(store.get('changed'))
@@ -112,53 +130,50 @@ def check_type():
     get_type = int(store.get('type'))
     return get_type
 
+##############################################################################
+# Main
+##############################################################################
 if __name__ == '__main__':
     initialize()
     set_standby()
-    get_colors()
+    get_display_parameters()
 
     print('Display initialized.')
 
     while True:
         print('Get new message from redis.')
-        get_new_message()
+        get_messages()
 
-        message1_position = canvas.width
-        message2_position = canvas.width
+        if mode == False:
+            lengths = []
+            positions =[]
+            coutners = []
 
-        message1_scroll_counter = 0
-        message2_scroll_counter = 0
+            for i in range(max_row):
+                positions[i] = canvas.width
+                coutners[i] = 0
 
-        while True:
-            if check():
-                if check_type():
-                    break
-                else:
-                    get_display_parameters()
-                    get_colors()
+            while True:
+                if check():
+                    if check_type():
+                        break
+                    else:
+                        get_display_parameters()
 
-            canvas.Clear()
+                canvas.Clear()
 
-            message1_length = graphics.DrawText(canvas, font, message1_position, 14, message1_color, message1)
-            message2_length = graphics.DrawText(canvas, font, message2_position, 28, message2_color, message2)
+                for i in range(max_row):
+                    lengths[i] = graphics.DrawText(canvas,default_font, positions[i], margin_top * (max_row+1), colors[i], messages[i])
 
-            if message1_scroll_speed < message1_scroll_counter:
-                message1_position -= 1
-                message1_scroll_counter = 0
+                    if scroll_speeds[i] < counters[i]:
+                        positions[i] -= 1
+                        counters[i] = 0
+                    
+                    if positions[i] + lengths[i] < 0:
+                        positions[i] = canvas.width
 
-            if message2_scroll_speed < message2_scroll_counter:
-                message2_position -= 1
-                message2_scroll_counter = 0
+                    counters[i] += 1
 
-            if message1_position + message1_length < 0:
-                message1_position = canvas.width
+                time.sleep(0.001)
 
-            if message2_position + message2_length < 0:
-                message2_position = canvas.width
-
-            message1_scroll_counter += 1
-            message2_scroll_counter += 1
-
-            time.sleep(0.001)
-
-            canvas = matrix.SwapOnVSync(canvas)
+                canvas = matrix.SwapOnVSync(canvas)

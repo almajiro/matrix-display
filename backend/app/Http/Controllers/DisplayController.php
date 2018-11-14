@@ -175,6 +175,45 @@ class DisplayController
         ]);
     }
 
+    public function setMode()
+    {
+        $payload = $this->processor->getPayload();
+
+        $this->redis->set('mode', $payload['mode']);
+        $this->setStatus(true);
+
+        return $this->processor->makeJsonResponse(true, []);
+    }
+
+    public function getMode()
+    {
+        $mode = $this->redis->get('mode');
+
+        return $this->processor->makeJsonResponse(true, [
+            'mode' => $mode
+        ]);
+    }
+
+    public function setRow(int $row)
+    {
+        $this->checkRow($row);
+
+        $this->redis->set('row', $row);
+        $this->redis->set('mode', true);
+        $this->setStatus(true);
+
+        return $this->processor->makeJsonResponse(true, []);
+    }
+
+    public function getRow(int $row)
+    {
+        $row = $this->redis->get('row');
+
+        return $this->processor->makeJsonResponse(true, [
+            'row' => $row
+        ]);
+    }
+
     /**
      * Check row.
      *
@@ -189,6 +228,11 @@ class DisplayController
         }
     }
 
+    /**
+     * Set changed flag
+     * 
+     * @param bool @$type
+     */
     private function setStatus(bool $type)
     {
         $this->redis->set('type', $type ? '1' : '0');

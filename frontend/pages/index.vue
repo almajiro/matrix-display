@@ -28,19 +28,19 @@
               label-for="message1-range"
             >
               <b-form-input v-model="message_scroll_speed[0]" type="range" id="message1-range" min="0"
-                            max="100" class="speed-slider" v-on:change="setSpeed(1)"></b-form-input>
+                            max="20" class="speed-slider" v-on:change="setSpeed(1)"></b-form-input>
             </b-form-group>
             <b-form-group
               label="2nd Row Scroll Speed"
               label-for="message1-range"
             >
               <b-form-input v-model="message_scroll_speed[1]" type="range" id="message2-range" min="0"
-                            max="100" class="speed-slider" v-on:change="setSpeed(2)"></b-form-input>
+                            max="20" class="speed-slider" v-on:change="setSpeed(2)"></b-form-input>
             </b-form-group>
           </div>
         </b-col>
       </b-row>
- 
+      <no-ssr>
         <b-row>
           <b-col md="6" offset-md="3">
             <div class="cosmic">
@@ -59,7 +59,7 @@
             </div>
           </b-col>
         </b-row>
-
+      </no-ssr>
     </b-container>
     <footer>
       <span>&copy; 2018 <a href="http://www.almajiro.tokyo" class="creator">Kuroki Almajiro</a>.</span>

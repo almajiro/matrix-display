@@ -24,3 +24,7 @@ $router->get('/message/{row}/speed', 'DisplayController@getSpeed');
 $router->post('/message/{row}/speed', 'DisplayController@setSpeed');
 $router->get('/message/{row}/color', 'DisplayController@getColor');
 $router->post('/message/{row}/color', 'DisplayController@setColor');
+$router->get('/mode', 'DisplayController@getMode');
+$router->post('/mode', 'DisplayController@setMode');
+$router->get('/row', 'DisplayController@getRow');
+$router->post('/row', 'DisplayController@setRow');
