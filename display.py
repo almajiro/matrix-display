@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
             for i in range(max_row):
                 positions[i] = canvas.width
-                coutners[i] = 0
+                counters[i] = 0
 
             while True:
                 if check():
