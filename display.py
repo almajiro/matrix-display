@@ -95,7 +95,7 @@ def get_scroll_speeds():
         scroll_speeds[i-1] = get_scroll_speed(i)
 
 def set_scroll_speed(row=1, speed=4):
-    store.set('message'+str(row)+'_scroll_speed', message1)
+    store.set('message'+str(row)+'_scroll_speed', speed)
 
 ##############################################################################
 # Common Functions
